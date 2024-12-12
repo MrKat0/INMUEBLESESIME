@@ -1,0 +1,47 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mi Sitio{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% block extra_css %}{% endblock %}
+    
+</head>
+<body>
+    <!-- Encabezado -->
+    <header class="header">
+        <div class="container">
+        <div class="logo">
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'images/logoinmuebles.jpeg' %}" alt="Logo">
+                </a>
+            </div>
+            <nav class="nav">
+                <a href="{% url 'publicar_inmueble' %}" class="button publicar-button">Publicar</a>
+                <a href="{% url 'perfil' %}">
+                    <img src="{% static 'images/icon.png' %}" alt="Perfil" class="perfil-icon">
+                </a>
+            </nav>
+        </div>
+    </header>
+    
+    
+
+    <!-- Contenido específico de cada página -->
+    <main>
+        
+        {% block content %}
+        <!-- El contenido específico de cada página irá aquí -->
+        {% endblock %}
+    </main>
+
+    <!-- Footer si es necesario -->
+    <footer>
+        <!-- Aquí puedes poner un pie de página si lo necesitas -->
+    </footer>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Encuentra un lugar para ti{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block content %}
+    <!-- Bloque para mostrar mensajes de Django -->
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="ecabezdo">
+
+        <h2>Encuentra un lugar para ti</h2>
+       
+    </div>
+    
+
+    <div class="filters">
+        <!-- Filtros -->
+        <form method="get" action=".">
+            <select name="tipo" onchange="this.form.submit()">
+                <option value="">Tipo</option>
+                <option value="Departamento" {% if request.GET.tipo == "Departamento" %}selected{% endif %}>Departamento</option>
+                <option value="Casa" {% if request.GET.tipo == "Casa" %}selected{% endif %}>Casa</option>
+                <option value="Cuarto" {% if request.GET.tipo == "Cuarto" %}selected{% endif %}>Cuarto</option>
+            </select>
+
+            <select name="costo" onchange="this.form.submit()">
+                <option value="">Costo</option>
+                <option value="1000-3000" {% if request.GET.costo == "1000-3000" %}selected{% endif %}>1,000 - 3,000</option>
+                <option value="3000-5000" {% if request.GET.costo == "3000-5000" %}selected{% endif %}>3,000 - 5,000</option>
+                <option value="5000-10000" {% if request.GET.costo == "5000-10000" %}selected{% endif %}>5,000 - 10,000</option>
+            </select>
+
+            <select name="distancia" onchange="this.form.submit()">
+                <option value="">Distancia</option>
+                <option value="0-5 km" {% if request.GET.distancia == "0-5 km" %}selected{% endif %}>0 km - 5 km</option>
+                <option value="5-10 km" {% if request.GET.distancia == "5-10 km" %}selected{% endif %}>5 km - 10 km</option>
+                <option value="10-15 km" {% if request.GET.distancia == "10-15 km" %}selected{% endif %}>10 km - 15 km</option>
+            </select>
+        </form>
+    </div>
+
+    <div class="listings">
+        {% for inmueble in inmuebles %}
+        <div class="listing">
+            <a href="{% url 'inmueble_detalle' inmueble.id %}">
+                {% if inmueble.imagenes.first %}
+                    <img src="{{ inmueble.imagenes.first.imagen.url }}" alt="{{ inmueble.tipo_inmueble }}" width="200">
+                {% endif %}
+                <div class="listing-info">
+                    <h3>{{ inmueble.tipo_inmueble }}</h3>
+                    <p>MXN {{ inmueble.precio }}</p>
+                    <p>A {{ inmueble.distancia }} km</p>
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <p>No hay inmuebles disponibles.</p>
+        {% endfor %}
+    </div>
+
+    <script>
+        function filtrar() {
+            const tipo = document.getElementById('tipo-filtro').value;
+            const costo = document.getElementById('costo-filtro').value;
+            const distancia = document.getElementById('distancia-filtro').value;
+
+            let url = `?tipo=${tipo}&costo=${costo}&distancia=${distancia}`;
+            window.location.href = url;
+        }
+    </script>
+{% endblock %}

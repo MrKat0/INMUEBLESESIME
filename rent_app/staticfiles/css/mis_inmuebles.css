@@ -1,0 +1,211 @@
+/* Contenedor principal */
+.container-inmus {
+    width: 800px; /* Ajusta el ancho según tu diseño */
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+}
+
+.inmueble {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.inmueble img {
+    width: 100%;
+    height: 200px; /* Ajusta la altura de la imagen */
+    object-fit: cover;
+}
+
+.info {
+    padding: 15px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.info h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-around;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #ddd;
+}
+
+/* Botones */
+
+
+/* Botones específicos */
+.btn-blue {
+
+
+    width: 200px;
+    height: 19px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: 2px solid #007bff;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 10px 10px;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-blue:hover {
+    color: #007bff;
+    background-color: #ffffff;
+}
+
+
+
+.btn-orange {
+   
+    width: 200px;
+    height: 40px;
+    background-color: #fd7e14;
+    color: #ffffff;
+    border: 2px solid #fd7e14;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-orange:hover {
+    color: #fd7e14;
+    background-color: #ffffff;
+}
+
+
+/* Estilos para el modal */
+/* Modal de confirmación */
+.modal {
+    display: none; /* Ocultar por defecto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.btn-red {
+    width: 200px;
+    height: 40px;
+    background-color: #da0000;
+    color: #ffffff;
+    /* @Gato 
+    4.3.3*/
+    border: 2px solid #000000;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-red:hover {
+    color: #da0000;
+    /* @Gato 
+    4.3.3*/
+    border: 2px solid #000000;
+    background-color: #ffffff;
+}
+
+.btn-red1 {
+    position: relative;
+    width: 100px;
+    height: 35px;
+    background-color: #ffffff;
+    color: #007bff;
+    border: 2px solid #007bff;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 10px 10px;
+    border-radius: 7px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-red1:hover {
+    color: #ffffff;
+    background-color: #007bff;
+}
+
+.btn-cancel {
+    position: relative;
+    left: -280px;
+    width: 100px;
+    height: 35px;
+    background-color: #dfdfdf;
+    color: #000000;
+    border: 2px solid #dfdfdf;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 10px 10px;
+    border-radius: 7px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-cancel:hover {
+    color: #490000;
+    background-color: #ffffff;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #000;
+}

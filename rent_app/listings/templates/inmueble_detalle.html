@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Detalle del Inmueble{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/inmueble_detalle.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="detail-container">
+    <!-- Carrusel -->
+    <div class="carousel">
+        {% for imagen in imagenes %}
+        <img src="{{ imagen.imagen.url }}" alt="Imagen del inmueble" class="{% if forloop.first %}active{% endif %}">
+        {% endfor %}
+        <div class="carousel-controls">
+            <button onclick="prevImage()">❮</button>
+            <button onclick="nextImage()">❯</button>
+        </div>
+    </div>
+
+    <!-- Detalles del inmueble -->
+    <div class="details">
+        <h2>{{ inmueble.tipo_inmueble }}</h2>
+        <p><strong>Precio:</strong> MXN {{ inmueble.precio }} mensuales &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Distancia:</strong> {{ inmueble.distancia }}</p>
+        <p id="p0"><p class="caja">{{ inmueble.direccion }}</p>
+        <p class="caja1"><strong>CP:</strong> {{ inmueble.codigo_postal }}</p>
+        <p><strong>Descripción:</strong></p>
+        <p class="caja2">{{ inmueble.descripcion }}</p>
+        <p class="caja3"><strong>Contacto:</strong>  {{ inmueble.numero_contacto }}</p>
+
+        <!-- Botones -->
+        <div class="buttons">
+            <!-- Botón de WhatsApp -->
+            <a class="whatsapp" href="https://wa.me/{{ inmueble.numero_contacto|default:'' }}" target="_blank">
+                Contactar por WhatsApp
+            </a>
+            
+            <form id="reserva-form" action="{% url 'crear_sesion_pago' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="inmueble_id" value="{{ inmueble.id }}">
+                <button type="submit">Reservar y Pagar</button>
+            </form>
+
+            {% if reserva_activa %}
+                <a href="{% url 'calificar_inmueble' inmueble.id %}" class="btn btn-secondary">Calificar Inmueble</a>
+            {% endif %}
+        
+        </div>
+
+        <!-- Botón y modal para comentarios -->
+        <button id="btnComentarios">Ver Comentarios</button>
+        <div id="modalComentarios" class="modal">
+            <div class="modal-co">
+                <span class="close" id="closeModal">&times;</span>
+                <h2>Comentarios</h2>
+                <div class="comentarios-contenedor">
+                    {% for comentario in comentarios %}
+                        <div class="comentario-item">
+                            <div class="estrellas">
+                                {% for i in "12345" %}
+                                    {% if i <= comentario.estrellas|stringformat:"i" %}
+                                        <span class="estrella llena">&#9733;</span>
+                                    {% else %}
+                                        <span class="estrella vacia">&#9734;</span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <strong>{{ comentario.usuario.first_name }} {{ comentario.usuario.last_name }}</strong> - {{ comentario.fecha_creacion|date:"d M Y" }}
+                            {% if comentario.verificado %}
+                                <span style="color: #28a745;">✔ Verificado</span>
+                            {% endif %}
+                            <p>{{ comentario.comentario }}</p>
+                        </div>
+                    {% empty %}
+                        <p>No hay comentarios aún. ¡Sé el primero en comentar!</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    let currentImageIndex = 0;
+    const images = document.querySelectorAll('.carousel img');
+
+    function showImage(index) {
+        images.forEach((img, i) => {
+            img.classList.remove('active');
+            if (i === index) img.classList.add('active');
+        });
+    }
+
+    function nextImage() {
+        currentImageIndex = (currentImageIndex + 1) % images.length;
+        showImage(currentImageIndex);
+    }
+
+    function prevImage() {
+        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+        showImage(currentImageIndex);
+    }
+
+    const btnComentarios = document.getElementById('btnComentarios');
+    const modalComentarios = document.getElementById('modalComentarios');
+    const closeModal = document.getElementById('closeModal');
+
+    btnComentarios.onclick = function () {
+        modalComentarios.style.display = 'flex';
+    };
+
+    closeModal.onclick = function () {
+        modalComentarios.style.display = 'none';
+    };
+
+    window.onclick = function (event) {
+        if (event.target === modalComentarios) {
+            modalComentarios.style.display = 'none';
+        }
+    };
+</script>
+{% endblock %}

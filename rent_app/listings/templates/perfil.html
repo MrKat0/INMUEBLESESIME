@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Mi perfil{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+{% endblock %}
+
+{% block content %}     
+    <h1>Mi perfil</h1>
+    
+    <div class="campo">
+        <div class="campo-label">Mi nombre</div>
+        <div class="campo-valor">{{ user.first_name }}</div>
+    </div>
+    
+    <div class="campo">
+        <div class="campo-label">Correo electrónico</div>
+        <div class="campo-valor">{{ user.email }}</div>
+    </div>
+    
+    <div class="campo">
+        <div class="campo-label">Contraseña</div>
+        <div class="campo-valor">********</div>
+    </div>
+    
+    <div class="contenedor-botones">
+        <!-- Botones superiores alineados horizontalmente -->
+        <div class="contenedor-acciones">
+            <a href="{% url 'editar_perfil' %}" class="btn btn-editar">Editar</a>
+           
+            <a href="{% url 'logout_and_redirect_mis_inmuebles' %}" class="btn btn-cerrar">Cerrar sesión</a>
+        </div>
+    
+        <!-- Botón naranja separado debajo -->
+        <a href="{% url 'mis_inmuebles' %}" class="btn btn-inmuebles">Mis inmuebles</a>
+        <a href="{% url 'inmuebles_rentados' %}" class="btn">Mis inmuebles rentados</a>
+        
+    </div>        
+{% endblock %}

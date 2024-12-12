@@ -1,0 +1,6 @@
+.env
+.venv
+env
+rent_app\settings.ini
+rent_app\rent_app\__pycache__
+rent_app\listings\__pycache__

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <h1>Iniciar Sesión</h1>
+    
+    <!-- Bloque para mostrar mensajes -->
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="/" />
+        
+        <label for="email">Ingresa tu correo electrónico</label>
+        <input type="email" name="email" id="email" placeholder="Ej. usuario@dominio.com" required>
+        
+        <label for="password">Ingresa tu contraseña</label>
+        <input type="password" name="password" id="password" required>
+        
+        <button type="submit" class="login-button">Iniciar sesión</button>
+
+       
+    </form>
+    <p><br>¿No tienes una cuenta? </p>
+    <a href="{% url 'register' %}" class="register-button">Registrate</a>
+</div>
+{% endblock %}

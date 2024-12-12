@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Tus Publicaciones{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/mis_inmuebles.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-inmus">
+    <!-- @Gato -->
+    <!-- 4.3.3.3 -->
+    <!-- 4.3.5.1 -->
+    <h1 class="title">Publicaciones a editar</h1>
+    {% if inmuebles %}
+        {% for inmueble in inmuebles %}
+            <div class="inmueble">
+                <!-- Imagen del inmueble -->
+                {% if inmueble.imagenes.all %}
+                    <img src="{{ inmueble.imagenes.first.imagen.url }}" alt="Imagen del inmueble">
+                {% else %}
+                    <img src="{% static 'images/load-default.jpg' %}" alt="Imagen no disponible">
+                {% endif %}
+
+                <!-- Información del inmueble -->
+                <div class="info">
+                    <h3>{{ inmueble.tipo_inmueble }} - MXN {{ inmueble.precio }}</h3>
+                    <p>{{ inmueble.descripcion }}</p>
+                </div>
+
+                <!-- Acciones (botones) -->
+                <div class="actions">
+                    <!-- Botón de editar -->
+                    <a href="{% url 'editar_inmueble' inmueble.id %}" class="btn-blue">Editar</a>
+                    
+                    <!-- Botón de eliminar -->
+                    <form action="{% url 'eliminar_inmueble' inmueble.id %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="button" onclick="confirmDelete({{ inmueble.id }})" class="btn-red">Eliminar</button>
+                    </form>
+
+                    <!-- Botón de volver a rentar -->
+                    {% if inmueble.estado == 'rentado' %}
+                        <form action="{% url 'volver_a_rentar' inmueble.id %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-orange">Volver a Rentar</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No tienes publicaciones aún.</p>
+    {% endif %}
+</div>
+
+
+<!-- Modal de Confirmación -->
+<div id="deleteModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Eliminar publicación</h2>
+        <p>¿Estás seguro que quieres eliminar este inmueble?</p>
+        <!-- @Gato -->
+         <!-- 4.3.3.1 -->
+        <p>Esta acción no se podra recuperar</p>
+        <div class="modal-buttons">
+            <button id="confirmDeleteButton" class="btn-red1">Confirmar</button>
+            <button onclick="closeModal()" class="btn-cancel">Cancelar</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let inmuebleIdToDelete;
+
+    // Función para abrir el modal de confirmación de eliminación
+    function confirmDelete(inmuebleId) {
+        inmuebleIdToDelete = inmuebleId;
+        const modal = document.getElementById('deleteModal');
+        modal.style.display = 'flex';  // Mostrar el modal
+    }
+
+    // Función para cerrar el modal
+    function closeModal() {
+        const modal = document.getElementById('deleteModal');
+        modal.style.display = 'none';  // Ocultar el modal
+    }
+
+    // Escuchar el clic en el botón de confirmación de eliminación
+    document.getElementById('confirmDeleteButton').onclick = function() {
+        if (inmuebleIdToDelete) {
+            // Crear un formulario para eliminar el inmueble
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = `/eliminar-inmueble/${inmuebleIdToDelete}/`;
+
+            // Agregar CSRF token al formulario
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+            if (csrfToken) {
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = 'csrfmiddlewaretoken';
+                csrfInput.value = csrfToken.value;
+                form.appendChild(csrfInput);
+            }
+
+            document.body.appendChild(form);
+            form.submit();  // Enviar el formulario para eliminar el inmueble
+        }
+    }
+
+    // Asegurar que el modal pueda cerrarse haciendo clic fuera de él
+    window.onclick = function(event) {
+        const modal = document.getElementById('deleteModal');
+        if (event.target === modal) {
+            closeModal();
+        }
+    }
+</script>
+
+
+
+{% endblock %}
