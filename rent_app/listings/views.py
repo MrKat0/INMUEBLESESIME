@@ -262,24 +262,25 @@ def publicar_inmueble(request):
             inmueble = inmueble_form.save(commit=False)
             inmueble.usuario = request.user  # Asegúrate de asignar al usuario autenticado
             
+            # @Gato
+            # Mostrar imagen de publicacion creada
             try:
                 inmueble.save()
-                print("Inmueble guardado correctamente:", inmueble)
-
-                # Procesa las imágenes subidas
                 for imagen in imagenes:
-                    try:
-                        ImagenInmueble.objects.create(inmueble=inmueble, imagen=imagen)
-                    except Exception as e:
-                        print("Error al guardar la imagen:", str(e))
-                        messages.error(request, "Hubo un error al guardar la imagen. Inténtalo de nuevo.")
-                        return render(request, 'publicar_inmueble.html', {'inmueble_form': inmueble_form})
+                    ImagenInmueble.objects.create(inmueble=inmueble, imagen=imagen)
 
-                messages.success(request, "Inmueble publicado exitosamente.")
-                return redirect('home')
+                # Retorna un mensaje de éxito en formato HTML
+                return HttpResponse("""
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background-color: #f9f9f9;">
+                        <img src="/static/'images/success.jpg" alt="Success Image" style="margin-bottom: 20px;" />
+                        <h2>¡Tu inmueble ha sido publicado con éxito!</h2>
+                        <a href="/" style="margin-top: 20px; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">Ir al Menú Principal</a>
+                    </div>
+                """)
             except Exception as e:
-                print("Error al guardar el inmueble:", str(e))
-                messages.error(request, "Hubo un error al publicar el inmueble. Inténtalo de nuevo.")
+                return HttpResponse(
+                    f'<h1 style="text-align: center; color: red;">Hubo un error al publicar el inmueble: {str(e)}</h1>'
+                )
         else:
             # Imprime los errores del formulario si no es válido
             print("Errores del formulario:", inmueble_form.errors)
