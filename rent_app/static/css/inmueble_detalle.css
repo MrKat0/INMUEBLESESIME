@@ -20,6 +20,7 @@ body {
     border-radius: 8px;
     display: flex;
     margin: 0 auto;    /* Centra el contenedor */
+    padding: 20px;
     gap: 20px;
 }
 
@@ -145,7 +146,8 @@ body {
             background: #ffffff;
             margin: 0 0 25px;
             height: 220px;
-            width: 750px;
+            /* @Gato */
+            width: auto;
             border-radius: 20px;
             border: 0.1px solid #000;
             overflow: hidden;
@@ -162,7 +164,8 @@ body {
                 background: #ffffff;
                 margin: 0 0 25px;
                 height: auto;
-                width: 750px;
+                /* @Gato */
+                width: auto;
                 border-radius: 20px;
                 border: 0.1px solid #000;
                 overflow: hidden;
@@ -236,12 +239,47 @@ body {
     color: #f45c43;
 }
 
+/* @Gato 
+Comments*/
+    /* Contenedor principal */
+    .main-container {
+        display: flex;
+        flex-direction: row;
+    }
 
+    /* Barra lateral de comentarios */
+    .sidebar-comentarios {
+        background-color: #f9f9f9;
+        border-left: 1px solid #ddd;
+        padding: 20px;
+        overflow-y: auto;
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    }
 
+    .sidebar-comentarios h2 {
+        margin-top: 0;
+        font-size: 1.5em;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+    }
 
+    .comentario-item {
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
 
+    .comentario-item:last-child {
+        border-bottom: none;
+    }
 
+    .estrella {
+        color: #ffc107;
+    }
 
+    .estrella.vacia {
+        color: #e4e5e9;
+    }
 
 /* Botón de Ver Comentarios */
 #btnComentarios {
@@ -317,7 +355,6 @@ body {
 .buttons button {
     position: relative;
     top: -122px;   /* Empuja hacia abajo desde su posición original */
-    left: 280px;
     background-color: #007bff;
     color: #fff;
     border: 2px solid #007bff; 

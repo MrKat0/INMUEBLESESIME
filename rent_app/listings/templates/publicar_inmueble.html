@@ -34,7 +34,9 @@
                         <!-- @Gato -->
                         <!-- 5.3 -->
                         <label for="numero_contacto">Número de contacto</label>
-                        <input type="number" name="numero_contacto" class="form-control" oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10);" >
+                        <input type="number" name="numero_contacto" class="form-control" oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10);"  required>
+                        <!-- Error message -->
+                        <span class="error-message" style="color: red; font-size: 12px; display: none;"></span>
                     <div class="image-preview" id="image-preview"></div>
                 </div>
             </div>
@@ -54,16 +56,22 @@
                             <option value="Casa">Casa</option>
                             <option value="Cuarto">Cuarto</option>
                         </select>
+                        <!-- Error message -->
+                        <span class="error-message" style="color: red; font-size: 12px; display: none;"></span>
                     </div>
                     <div class="form-group">
                         <label for="direccion">Dirección</label>
                         <input type="text" name="direccion" class="form-control" placeholder="Calle, Colonia, No" required>
+                        <!-- Error message -->
+                        <span class="error-message" style="color: red; font-size: 12px; display: none;"></span>
                     </div>
                 </div>
                 <div class="grid-group">
                     <div class="form-group">
                         <label for="codigo_postal">Código Postal</label>
                         <input type="text" name="codigo_postal" class="form-control" required oninput="if(this.value.length > 5) this.value = this.value.slice(0, 5);">
+                        <!-- Error message -->
+                        <span class="error-message" style="color: red; font-size: 12px; display: none;"></span>
                     </div>
                     <!-- @Gato -->
                     <!-- 5.8 -->
@@ -75,6 +83,8 @@
                             <option value="5-10 km">10-15 km</option>
                             <option value="10-15 km">15-20 km</option>
                         </select>
+                        <!-- Error message -->
+                        <span class="error-message" style="color: red; font-size: 12px; display: none;"></span>
                     </div>
                 </div>
                 <!-- @Gato -->
@@ -83,10 +93,14 @@
                     <div class="form-group">
                         <label for="precio">Precio</label>
                         <input type="number" name="precio" class="form-control" placeholder="MXN" required>
+                        <!-- Error message -->
+                        <span class="error-message" style="color: red; font-size: 12px; display: none;"></span>
                     </div>
                     <div class="form-group">
                         <label for="descripcion">Descripción</label>
                         <textarea name="descripcion" class="form-control" rows="5" required oninput="if(this.value.length > 500) this.value = this.value.slice(0, 500);"></textarea>
+                        <!-- Error message -->
+                        <span class="error-message" style="color: red; font-size: 12px; display: none;"></span>
                     </div>
                 </div>
             </div>
@@ -151,131 +165,52 @@
     // @Gato
     // Added pop-up error handler
     // Function to show error messages in a popup
-    function showErrorPopup(message) {
-        // Create popup container if it doesn't exist
-        let popup = document.getElementById('error-popup');
-        if (!popup) {
-            popup = document.createElement('div');
-            popup.id = 'error-popup';
-            popup.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background-color: #f44336;
-                color: white;
-                padding: 15px;
-                border-radius: 5px;
-                z-index: 1000;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                max-width: 300px;
-                word-wrap: break-word;
-                display: none;
-            `;
-            document.body.appendChild(popup);
-
-            // Add close button
-            const closeButton = document.createElement('button');
-            closeButton.innerHTML = '&times;';
-            closeButton.style.cssText = `
-                position: absolute;
-                top: 5px;
-                right: 10px;
-                background: none;
-                border: none;
-                color: white;
-                font-size: 20px;
-                cursor: pointer;
-            `;
-            closeButton.onclick = () => {
-                popup.style.display = 'none';
-            };
-            popup.appendChild(closeButton);
-        }
-
-        // Set message and show popup
-        const messageContainer = popup.querySelector('p') || document.createElement('p');
-        messageContainer.textContent = message;
-        if (!messageContainer.parentNode) {
-            popup.appendChild(messageContainer);
-        }
-
-        popup.style.display = 'block';
-
-        // Automatically hide popup after 5 seconds
-        setTimeout(() => {
-            popup.style.display = 'none';
-        }, 5000);
-    }
-
     // Function to validate form before submission
     function validateForm(event) {
         const form = event.target;
         const requiredFields = form.querySelectorAll('[required]');
-        const imageInput = document.getElementById('imagenes');
+        let isValid = true;
 
-        // Validate required fields
-        for (let field of requiredFields) {
+        requiredFields.forEach(field => {
+            const errorContainer = field.parentElement.querySelector('.error-message');
+
+            // Limpia mensajes de error previos
+            if (errorContainer) {
+                errorContainer.textContent = '';
+                errorContainer.style.display = 'none';
+            }
+
+            // Verifica si el campo está vacío
             if (!field.value.trim()) {
-                event.preventDefault();
-                showErrorPopup(`Por favor complete el campo: ${field.name || field.id}`);
-                return false;
+                isValid = false;
+
+                if (errorContainer) {
+                    errorContainer.textContent = `Este campo es obligatorio.`;
+                    errorContainer.style.display = 'block';
+                }
             }
-        }
-
-        // Validate image count
-        if (selectedImages.length < 7 || selectedImages.length > 15) {
-            event.preventDefault();
-            showErrorPopup(`Debes subir entre 7 y 15 fotos. Actualmente tienes ${selectedImages.length} foto(s).`);
-            return false;
-        }
-
-        // Store form data in localStorage before submission
-        const formData = new FormData(form);
-        for (let [key, value] of formData.entries()) {
-            if (key !== 'imagenes') {
-                localStorage.setItem(`form_${key}`, value);
-            }
-        }
-
-        // Store image count
-        localStorage.setItem('form_image_count', selectedImages.length);
-
-        // Update the file input with selected images
-        const dataTransfer = new DataTransfer();
-        selectedImages.forEach(file => {
-            dataTransfer.items.add(file);
         });
-        imageInput.files = dataTransfer.files;
 
-        return true;
+        // Validar número de imágenes seleccionadas
+        const imageInput = document.getElementById('imagenes');
+        if (selectedImages.length < 7 || selectedImages.length > 15) {
+            isValid = false;
+
+            const errorContainer = imageInput.parentElement.querySelector('.error-message');
+            if (errorContainer) {
+                errorContainer.textContent = `Debes subir entre 7 y 15 fotos. Actualmente tienes ${selectedImages.length} foto(s).`;
+                errorContainer.style.display = 'block';
+            }
+        }
+
+        if (!isValid) {
+            event.preventDefault(); // Evitar envío si hay errores
+        }
     }
 
-    // Restore form data on page load
+    // Adjuntar validación al evento submit
     document.addEventListener('DOMContentLoaded', () => {
         const form = document.getElementById('publicar-inmueble-form');
-        const requiredFields = form.querySelectorAll('[required]');
-
-        // Restore input values
-        requiredFields.forEach(field => {
-            const savedValue = localStorage.getItem(`form_${field.name}`);
-            if (savedValue) {
-                field.value = savedValue;
-            }
-        });
-
-        // Restore image count preview
-        const savedImageCount = localStorage.getItem('form_image_count');
-        if (savedImageCount) {
-            showErrorPopup(`Recuperando formulario anterior. Imágenes previas: ${savedImageCount}`);
-        }
-
-        // Clear localStorage after restoring (optional, can be removed if you want to keep data)
-        localStorage.removeItem('form_image_count');
-        requiredFields.forEach(field => {
-            localStorage.removeItem(`form_${field.name}`);
-        });
-
-        // Attach form validation to submit event
         form.addEventListener('submit', validateForm);
     });
 </script>
