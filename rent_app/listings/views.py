@@ -190,6 +190,7 @@ def editar_perfil(request):
         'form': user_form,
         'password_form': password_form
     })
+    
 @login_required
 def mis_inmuebles(request):
     inmuebles = Inmueble.objects.filter(usuario=request.user)  # Filtra por usuario actual

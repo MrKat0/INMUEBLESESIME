@@ -51,9 +51,11 @@
                         <option value="10-15 km" {% if inmueble.distancia == '10-15 km' %}selected{% endif %}>10-15 km</option>
                     </select>
                 </div>
+                <!-- @Gato -->
+                 <!-- "Precio" input type removed -->
                 <div class="form-group">
                     <label for="precio">Precio</label>
-                    <input type="number" name="precio" class="form-control" placeholder="MXN" value="{{ inmueble.precio }}" required>
+                    <input name="precio" class="form-control" placeholder="MXN" value="{{ inmueble.precio }}" required>
                 </div>
                 <div class="form-group">
                     <label for="direccion">Dirección</label>
